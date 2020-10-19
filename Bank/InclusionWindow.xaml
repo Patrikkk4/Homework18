@@ -1,0 +1,176 @@
+﻿<Window x:Class="Bank.ControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:inter="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:Bank"
+        xmlns:vm="clr-namespace:Bank.ViewModel"
+        mc:Ignorable="d" 
+        Name="ClientInclusionWindow"
+        Title="Управление счетами"
+        Height="639.039"
+        Width="970.199"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:InclusionViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="235"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+
+            <TextBox
+                Style="{StaticResource TextBoxStyle}"
+                Text="{Binding IncModel.LastName}"/>
+
+            <TextBox
+                Style="{StaticResource TextBoxStyle}"
+                Text="{Binding IncModel.Name}"/>
+
+            <TextBox
+                Style="{StaticResource TextBoxStyle}"
+                Text="{Binding IncModel.Patronymic}"/>
+
+            <TextBlock
+                Style="{StaticResource TextBlockStyle}"
+                Text="Статус клиента"
+                TextWrapping="Wrap"/>
+
+            <ComboBox
+                Style="{StaticResource ComboBoxStyle}"
+                HorizontalAlignment="Center"
+                Width="195"
+                ItemsSource="{Binding ClientStatusList}"
+                SelectedItem="{Binding IncModel.ClientStatus}">
+
+            </ComboBox>
+
+            <TextBlock
+                    Style="{StaticResource TextBlockStyle}"
+                    Text="Сумма вклада"/>
+
+            <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding Inclusion}"/>
+
+            <TextBlock
+                    Style="{StaticResource TextBlockStyle}"
+                    Text="Ставка"/>
+
+            <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding IncModel.Percents}"/>
+
+            <DatePicker
+                Margin="5"
+                SelectedDateFormat="Short"
+                SelectedDate="{Binding DateEndInclusion}"/>
+
+            <CheckBox
+                Margin="5"
+                Content="Капитализация"
+                IsChecked="{Binding Capitalize, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button 
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Left"
+                Margin="10,10,0,10"
+                Content="Добавить вклад" Width="101"
+                Command="{Binding AddNewInclusion}"/>
+
+            <TextBlock
+                Style="{StaticResource TextBlockStyle}"
+                Text="Пополнить вклад"/>
+
+            <TextBox
+                Style="{StaticResource TextBoxStyle}"
+                Text="{Binding AddMoney}"/>
+
+            <RadioButton
+                Content="Пополнить"
+                Margin="5 5 5 0"
+                IsChecked="{Binding RadioAdd}"/>
+
+            <RadioButton
+                Content="Снять"
+                Margin="5 5 5 0"
+                IsChecked="{Binding RadioWithdraw}"/>
+
+            <Button
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Left"
+                Margin="10,10,0,10"
+                Content="Выполнить"
+                Command="{Binding AddMoneyCommand}"/>
+
+            <Button
+                Style="{StaticResource ButtonStyle}"
+                HorizontalAlignment="Left"
+                Margin="10,0,0,10"
+                Content="Перевод"
+                Command="{Binding OpenTransfer}"/>
+
+        </StackPanel>
+
+        <DataGrid
+            Name="InclusionTable"
+            HeadersVisibility="Column"
+            Grid.Column="1"
+            Margin="5"
+            CanUserAddRows="False"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding TableView}"
+            SelectedItem="{Binding SelectInclusion}">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn
+                        Header="Номер вклада"
+                        Binding="{Binding Bill}"
+                    IsReadOnly="True"/>
+
+                <DataGridTextColumn
+                        Header="Дата вклада"
+                        Binding="{Binding DateInclusion}"
+                    IsReadOnly="True"/>
+
+                <DataGridTextColumn
+                        Header="Дата окончания вклада"
+                        Binding="{Binding DateEndInclusion}"/>
+
+                <DataGridTextColumn
+                        Header="Сумма вклада"
+                        Binding="{Binding Inclusion, 
+                    UpdateSourceTrigger=PropertyChanged, 
+                    Mode=TwoWay}"/>
+
+                <DataGridTextColumn
+                        Header="Процентная ставка"
+                        Binding="{Binding Percents}"/>
+
+                <DataGridCheckBoxColumn
+                        Header="Капитализация"
+                        Binding="{Binding Capitalize, 
+                    UpdateSourceTrigger=PropertyChanged, 
+                    Mode=TwoWay}"/>
+
+                <DataGridTextColumn
+                        Header="Итог"
+                        Binding="{Binding Sum}"/>
+
+                <DataGridTextColumn
+                        Header="Статус влада"
+                        Binding="{Binding StatusInclusion}"/>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </Grid>
+</Window>

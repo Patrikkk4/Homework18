@@ -1,0 +1,222 @@
+﻿<Window x:Class="Bank.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        xmlns:vm="clr-namespace:Bank.ViewModel"
+        mc:Ignorable="d"
+        Name="ClientMainWindow"
+        Title="Клиенты" 
+        Height="{Binding Height, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+        Width="933.942" 
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:ClientViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="235"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid
+            HeadersVisibility="Column"
+            Grid.Column="1"
+            Margin="10"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding AllClients}"
+            SelectedItem="{Binding SelectedClient}">
+
+            <DataGrid.InputBindings>
+                <MouseBinding
+                    Gesture="LeftDoubleClick"
+                    Command="{Binding OpenControl}"/>
+            </DataGrid.InputBindings>
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn
+                    Header="Фамилия"
+                    Binding="{Binding LastName}"/>
+
+                <DataGridTextColumn
+                    Header="Имя"
+                    Binding="{Binding Name}"/>
+
+                <DataGridTextColumn
+                    Header="Отчество"
+                    Binding="{Binding Patronymic}"/>
+
+                <DataGridTextColumn
+                    Header="Дата регистрации"
+                    Binding="{Binding RegistrationDate}"/>
+
+                <DataGridTextColumn
+                    Header="Статус клиента"
+                    Binding="{Binding ClientStatus}"/>
+
+                <DataGridTextColumn
+                    Header="Количество счетов"
+                    Binding="{Binding ColBills}"/>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <StackPanel
+            Margin="10">
+            <StackPanel
+                Margin="5 10 5 5">
+
+                <TextBlock 
+                    Text="Введите фамилию клиента"
+                    Style="{StaticResource TextBlockStyle}"/>
+
+                <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding LastName}"/>
+
+                <TextBlock
+                    Text="Введите имя клиента"
+                    Style="{StaticResource TextBlockStyle}"/>
+
+                <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding Name}"/>
+
+                <TextBlock
+                    Text="Введите отчество клиента"
+                    Style="{StaticResource TextBlockStyle}"/>
+
+                <TextBox
+                    Style="{StaticResource TextBoxStyle}"
+                    Text="{Binding Patronymic}"/>
+
+                <TextBlock
+                Style="{StaticResource TextBlockStyle}"
+                Text="Статус клиента"
+                TextWrapping="Wrap"/>
+
+                <ComboBox
+                    Style="{StaticResource ComboBoxStyle}"
+                    HorizontalAlignment="Center" 
+                    Margin="5" Width="195"
+                    Text="{Binding ClientStatus}">
+
+                    <ComboBoxItem>
+                        <TextBlock Text="Обычный"/>
+                    </ComboBoxItem>
+
+                    <ComboBoxItem>
+                        <TextBlock Text="VIP"/>
+                    </ComboBoxItem>
+
+                    <ComboBoxItem>
+                        <TextBlock Text="Корпоративный"/>
+                    </ComboBoxItem>
+
+                </ComboBox>
+
+            </StackPanel>
+
+            <StackPanel>
+
+                <Button
+                    Margin="0 0 120 0"
+                    Command="{Binding AddClient}">
+
+                    <TextBlock
+                        Text="Добавить клиента"
+                        TextWrapping="Wrap"
+                        FontSize="10"/>
+
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource ButtonStyle}" TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LastName}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Patronymic}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ClientStatus}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+
+                </Button>
+
+                <Button
+                    
+                    Margin="0 -30 -50 0"
+                    Style="{StaticResource ButtonStyle}" 
+                    Command="{Binding OpenControl}">
+
+                    <TextBlock
+                        Text="Управление счетами"
+                        TextWrapping="Wrap"
+                        FontSize="10"/>
+
+                </Button>
+
+                <Button
+                    HorizontalAlignment="Left"
+                    Margin="10"
+                    Style="{StaticResource ButtonStyle}" 
+                    Command="{Binding SaveFile}">
+
+                    <TextBlock
+                        Text="Сохранить файл"
+                        TextWrapping="Wrap"
+                        FontSize="10"/>
+
+                </Button>
+
+                <Button
+                    HorizontalAlignment="Left"
+                    Margin="95 -50 0 0"
+                    Style="{StaticResource ButtonStyle}" 
+                    Command="{Binding LoadFile}">
+
+                    <TextBlock
+                        Text="Загрузить файл"
+                        TextWrapping="Wrap"
+                        FontSize="10"/>
+
+                </Button>
+
+            </StackPanel>
+
+            <TextBlock
+                Style="{StaticResource TextBlockStyle}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontSize="10"
+                TextWrapping="Wrap"
+                Text="{Binding ProgressBarStatus}"/>
+
+            <ProgressBar
+                IsIndeterminate="{Binding ProgressBarStartStop}"
+                Value="{Binding FillProgBar}"
+                VerticalAlignment="Center"
+                Minimum="0"
+                Maximum="1000000"
+                Height="13"
+                Foreground="Black"/>
+
+            
+        </StackPanel>
+
+    </Grid>
+</Window>
